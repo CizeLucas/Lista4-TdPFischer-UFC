@@ -26,8 +26,8 @@ public class Fatura {
 		this.totalPrice = pricePerUnit*quantity;
 	}
 	
-	public void applyDiscount(int discountPercetage) {
-		this.pricePerUnit = this.pricePerUnit*(1-((float)discountPercetage/100));
+	public void applyDiscount(double discountPercetage) {
+		this.pricePerUnit = this.pricePerUnit*(1-(discountPercetage/100));
 	}
 
 	public double getValorFatura() {
