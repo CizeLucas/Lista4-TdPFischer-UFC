@@ -10,13 +10,22 @@ public class Questao05 {
 		System.out.println("\n");
 		
 		
-		Contato ctt2 = new Contato(1010, "Junin", "juningames@java.com", "96669777", "Rua: ****quepareo / Num.: 945", "juninehdoido");
+		Contato ctt2 = new Contato(1010, "Junin", "juningames@java.com", "96669777", "Rua: ****quepareo / Num.: 945", "junin eh doido maluco");
 		System.out.println(ctt2.checkContact());
 		System.out.println(ctt2.printContact());
 		System.out.println("\n");
 		
 		Contato ctt3 = ctt1.duplicateContact();
 		System.out.println(ctt3.printContact());
+		System.out.println("\n");
+		
+		Agenda agenda = new Agenda();
+		agenda.addContact(ctt1);
+		agenda.addContact(ctt2);
+		
+		Cliente cliente = new Cliente(agenda);
+		cliente.printAgendaContacts();
+		System.out.println("\n");
 	}
 	
 	

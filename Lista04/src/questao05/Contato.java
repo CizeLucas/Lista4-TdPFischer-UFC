@@ -2,7 +2,7 @@ package questao05;
 
 public class Contato {
 
-	//	A, B, C, D, E, G, 
+	//	FALTA FZR As alternativas:  H, I, J
 	
 	int id;
 	String name;
