@@ -1,0 +1,10 @@
+package Questao17;
+
+public class Questao17 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
