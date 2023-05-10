@@ -13,7 +13,7 @@ public class JogoDaVelha {
 			if(grid[i][j]==0) {
 				return true;
 			}
-		}
+		} 
 		return false;
 	}
 	
