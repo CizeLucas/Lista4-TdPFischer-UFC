@@ -2,32 +2,52 @@ package Questao18;
 
 public class Celulas {
 	
+	int id;
 	int x;
 	int y;
-	Robo robo;
 	private boolean temMoeda;
 	private boolean temRobo;
+	private boolean roboVisitou;
 	
-	Celulas(int x, int y){
+	Celulas(int id, int x, int y){
+		this.id = id;
 		this.x = x;
 		this.y = y;
 		temMoeda = false;
 		temRobo = false;
+		roboVisitou = false;
 	}
 	
-	public boolean temRobo() {
+	
+	public boolean getRoboVisitou() {
+		return roboVisitou;
+	}
+	
+	public void setRoboVisitou(boolean roboVisitou) {
+		this.roboVisitou = roboVisitou;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public boolean getTemRobo() {
 		return temRobo;
 	}
 	
-	public boolean temMoeda() {
+	public boolean getTemMoeda() {
 		return temMoeda;
 	}
 	
-	public void ManipularRobo(boolean temRobo) {
+	public void setTemRobo(boolean temRobo) {
 		this.temRobo = temRobo;
 	}
 	
-	public void ManipularMoeda(boolean temMoeda) {
+	public void setTemMoeda(boolean temMoeda) {
 		this.temMoeda = temMoeda;
 	}
 	

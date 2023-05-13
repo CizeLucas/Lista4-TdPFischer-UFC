@@ -9,49 +9,98 @@ public class Tabuleiro {
 	public int xMeio;
 	public int yMeio;
 	public ArrayList<Celulas> celulas;
-	public Robo robo;
 	
 	public Tabuleiro(int tamanho) {
 		this.tamanho = tamanho;
+		int cont=0;
 		celulas = new ArrayList<Celulas>();
-		for(int x=0; x<tamanho; x++) {
-			for(int y=0; y<tamanho; y++) {
-				celulas.add(new Celulas(x, y));
+		for(int y=0; y<tamanho; y++) {
+			for(int x=0; x<tamanho; x++) {
+				celulas.add(new Celulas(cont, x, y));
+				cont++;
 			}
 		}
 		
 		Random numAleatorio = new Random();
-		for(int i=0; i<((int)tamanho*0.6); i++ ) {
-			celulas.get(numAleatorio.nextInt(tamanho*tamanho)).ManipularMoeda(true);
+		for(int i=0; i<((int)tamanho*0.6); i++ ) { // B)
+			celulas.get(numAleatorio.nextInt(tamanho*tamanho)).setTemMoeda(true);
 		}
 		
 		xMeio = (int)tamanho/2;
 		yMeio = (int)tamanho/2;
-		for (Celulas celula : celulas) {
+		for (Celulas celula : celulas) 
 			if(celula.x==xMeio && celula.y==yMeio) {
-				celula.ManipularMoeda(false);
-				celula.ManipularRobo(true);
+				celula.setTemMoeda(false);
+				celula.setTemRobo(true);
+				celula.setRoboVisitou(true);
 			}
-		}
-		
-		
 	}
 	
-	public void imprimirTabuleiro() {
+	public boolean moverRobo(int coordInicial[], int coordFinal[] ) {
+		boolean celulaFinalTemMoeda=false;
+		
+		for (Celulas celula : celulas) {
+			if(celula.getX() == coordInicial[0] && celula.getY() == coordInicial[1]) {
+				celula.setTemRobo(false);
+			}
+			if(celula.getX() == coordFinal[0] && celula.getY() == coordFinal[1]) {
+				celula.setTemRobo(true);
+				celulaFinalTemMoeda = (celula.getTemMoeda() && !celula.getRoboVisitou());
+				celula.setRoboVisitou(true);
+			}
+		}
+		return celulaFinalTemMoeda;
+	}
+	
+	
+	
+	public boolean coordenadaExiste(int coord[]) {
+		return (coord[0]+1<=tamanho && coord[0]>=0 && coord[1]+1<=tamanho && coord[1]>=0);
+	}
+	
+	public int getxMeio() {
+		return xMeio;
+	}
+
+	public int getyMeio() {
+		return yMeio;
+	}
+
+	public int getTamanho() {
+		return tamanho;
+	}
+
+	public void imprimirTabuleiro() { // E)
 		Celulas celulaTemp;
+		int contY=tamanho-1;
+		
+		//for(int i=tamanho-1; i>=0; i--) 
+		for(int i=0; i<tamanho; i++) {
+			System.out.print(i+" ");
+		}
+		
+		System.out.println();
+		
 		for(int x=1; x<=tamanho*tamanho; x++) {
 			celulaTemp = celulas.get(x-1);
-			if(celulaTemp.temRobo()) {
-				System.out.print("R ");
-			} else if(celulaTemp.temMoeda()){
-				System.out.print("$ ");
+			
+			if(celulaTemp.getTemRobo()) {
+				System.out.print("# "); //se tiver robo
+			} else if(celulaTemp.getRoboVisitou()) {
+				
+				if(celulaTemp.getTemMoeda()){
+					System.out.print("$ "); //se tiver moeda
+				} else {
+					System.out.print("@ "); //se nao tiver NADA
+				}
+				
 			} else {
-				System.out.print("* ");
+				System.out.print("* "); //se nao tiver NADA
 			}
-			
-			if(x%tamanho==0) 
-				System.out.println();
-			
+			if(x%tamanho==0) {
+				System.out.println(contY+" ");
+				contY--;
+			}
 		}
 	}
 }
