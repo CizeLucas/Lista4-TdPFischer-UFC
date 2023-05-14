@@ -14,11 +14,20 @@ public class Robo {
 	private int qtdCasasSudeste; //Baixo Direita
 	private int qtdCasasNoroeste; //Cima Esquerda
 	private int qtdCasasSudoeste; //Baixo Esquerda
+	private boolean movimentosRestritos;
+	private int idDoMovimento;
 	
-	public Robo(int xMeio, int yMeio, Tabuleiro plano) {
+	public Robo(int xMeio, int yMeio, Tabuleiro plano, boolean iniciaEmCoordZeroZero) {
 		this.plano = plano;
-		coord[0] = xMeio;
-		coord[1] = yMeio;
+		if(iniciaEmCoordZeroZero) {
+			coord[0] = 0;
+			coord[1] = 0;
+			
+		} else {
+			coord[0] = xMeio;
+			coord[1] = yMeio;
+		}
+		plano.inicializarRobo(coord);
 		pontuacao=0;
 		qtdCasasVisitadas=0;
 		qtdCasasNorte=0;
@@ -29,144 +38,242 @@ public class Robo {
 		qtdCasasSudeste=0;
 		qtdCasasNoroeste=0;
 		qtdCasasSudoeste=0;
+		movimentosRestritos = false;
+		idDoMovimento=0;
 	}
 	
 	//vai realizar os movimentos aqui
 	
-	public void movParaCima(){
-		int coordTemp[] = new int[2];
-		coordTemp[0] = coord[0];
-		coordTemp[1] = coord[1];
-		coord[1]--; //y-- para subir
-		if(plano.coordenadaExiste(coord)) {
-			if(plano.moverRobo(coordTemp, coord)) {
-				this.modificarPontuacao(10, true);
-			}
-			qtdCasasVisitadas++;
-			qtdCasasNorte++;
-		} else {
-			coord[1]++;
-		}
+	public void roboComMovimentosRestritos(boolean movRestritos) { // D)
+		movimentosRestritos = movRestritos;
 	}
 	
-	public void movParaBaixo(){
-		int coordTemp[] = new int[2];
-		coordTemp[0] = coord[0];
-		coordTemp[1] = coord[1];
-		coord[1]++; //y++ para descer
-		if(plano.coordenadaExiste(coord)) {
-			if(plano.moverRobo(coordTemp, coord)) {
-				this.modificarPontuacao(10, true);
+	public boolean movParaCima(){
+		boolean movRealizado=false;
+		if(!(movimentosRestritos && idDoMovimento==1)) {
+			idDoMovimento = 1;
+			movRealizado=true;
+			int coordTemp[] = new int[2];
+			coordTemp[0] = coord[0];
+			coordTemp[1] = coord[1];
+			coord[1]--; //y-- para subir
+			if(plano.coordenadaExiste(coord)) {
+				if(plano.moverRobo(coordTemp, coord)) {
+					this.modificarPontuacao(10, true);
+				}
+				qtdCasasVisitadas++;
+				qtdCasasNorte++;
+			} else {
+				coord[1]++;
+				movRealizado=false;
 			}
-			qtdCasasVisitadas++;
-			qtdCasasSul++;
-		} else {
-			coord[1]--;
 		}
+		return movRealizado;
 	}
 	
-	public void movParaDireita(){
-		int coordTemp[] = new int[2];
-		coordTemp[0] = coord[0];
-		coordTemp[1] = coord[1];
-		coord[0]++; //x++ para direita
-		if(plano.coordenadaExiste(coord)) {
-			if(plano.moverRobo(coordTemp, coord)) {
-				this.modificarPontuacao(10, true);
+	public boolean movParaBaixo(){
+		boolean movRealizado=false;
+		if(!(movimentosRestritos && idDoMovimento==2)) {
+			idDoMovimento = 2;
+			movRealizado=true;
+			int coordTemp[] = new int[2];
+			coordTemp[0] = coord[0];
+			coordTemp[1] = coord[1];
+			coord[1]++; //y++ para descer
+			if(plano.coordenadaExiste(coord)) {
+				if(plano.moverRobo(coordTemp, coord)) {
+					this.modificarPontuacao(10, true);
+				}
+				qtdCasasVisitadas++;
+				qtdCasasSul++;
+			} else {
+				coord[1]--;
+				movRealizado = false;
 			}
-			qtdCasasVisitadas++;
-			qtdCasasLeste++;
-		} else {
-			coord[0]--;
-		}
+		} 
+		return movRealizado;
 	}
 	
-	public void movParaEsquerda(){
-		int coordTemp[] = new int[2];
-		coordTemp[0] = coord[0];
-		coordTemp[1] = coord[1];
-		coord[0]--; //x-- para esquerda
-		if(plano.coordenadaExiste(coord)) {
-			if(plano.moverRobo(coordTemp, coord)) {
-				this.modificarPontuacao(10, true);
+	public boolean movParaDireita(){
+		boolean movRealizado=false;
+		if(!(movimentosRestritos && idDoMovimento==3)) {
+			idDoMovimento = 3;
+			movRealizado=true;
+			int coordTemp[] = new int[2];
+			coordTemp[0] = coord[0];
+			coordTemp[1] = coord[1];
+			coord[0]++; //x++ para direita
+			if(plano.coordenadaExiste(coord)) {
+				if(plano.moverRobo(coordTemp, coord)) {
+					this.modificarPontuacao(10, true);
+				}
+				qtdCasasVisitadas++;
+				qtdCasasLeste++;
+			} else {
+				coord[0]--;
+				movRealizado=false;
 			}
-			qtdCasasVisitadas++;
-			qtdCasasOeste++;
-		} else {
-			coord[0]++;
 		}
+		return movRealizado;
 	}
 	
-	public void movDiagCimaDireita(){
-		int coordTemp[] = new int[2];
-		coordTemp[0] = coord[0];
-		coordTemp[1] = coord[1];
-		coord[0]++; //x++ para direita
-		coord[1]--; //y-- para subir
-		if(plano.coordenadaExiste(coord)) {
-			if(plano.moverRobo(coordTemp, coord)) {
-				this.modificarPontuacao(10, true);
+	public boolean movParaEsquerda(){
+		boolean movRealizado=false;
+		if(!(movimentosRestritos && idDoMovimento==4)) {
+			idDoMovimento = 4;
+			movRealizado=true;
+			int coordTemp[] = new int[2];
+			coordTemp[0] = coord[0];
+			coordTemp[1] = coord[1];
+			coord[0]--; //x-- para esquerda
+			if(plano.coordenadaExiste(coord)) {
+				if(plano.moverRobo(coordTemp, coord)) {
+					this.modificarPontuacao(10, true);
+				}
+				qtdCasasVisitadas++;
+				qtdCasasOeste++;
+			} else {
+				coord[0]++;
+				movRealizado=false;
 			}
-			qtdCasasVisitadas++;
-			qtdCasasNordeste++;
-		} else {
-			coord[0]--;
-			coord[1]++;
 		}
+		return movRealizado;
 	}
 	
-	public void movDiagCimaEsquerda(){
-		int coordTemp[] = new int[2];
-		coordTemp[0] = coord[0];
-		coordTemp[1] = coord[1];
-		coord[0]--; //x-- para esquerda
-		coord[1]--; //y-- para subir
-		if(plano.coordenadaExiste(coord)) {
-			if(plano.moverRobo(coordTemp, coord)) {
-				this.modificarPontuacao(10, true);
+	public boolean movDiagCimaDireita(){
+		boolean movRealizado=false;
+		if(!(movimentosRestritos && idDoMovimento==5)) {
+			idDoMovimento = 5;
+			movRealizado=true;
+			int coordTemp[] = new int[2];
+			coordTemp[0] = coord[0];
+			coordTemp[1] = coord[1];
+			coord[0]++; //x++ para direita
+			coord[1]--; //y-- para subir
+			if(plano.coordenadaExiste(coord)) {
+				if(plano.moverRobo(coordTemp, coord)) {
+					this.modificarPontuacao(10, true);
+				}
+				qtdCasasVisitadas++;
+				qtdCasasNordeste++;
+			} else {
+				coord[0]--;
+				coord[1]++;
+				movRealizado=false;
 			}
-			qtdCasasVisitadas++;
-			qtdCasasNoroeste++;
-		} else {
-			coord[0]++;
-			coord[1]++;
 		}
+		return movRealizado;
 	}
 	
-	public void movDiagBaixoDireita(){
-		int coordTemp[] = new int[2];
-		coordTemp[0] = coord[0];
-		coordTemp[1] = coord[1];
-		coord[0]++; //x++ para direita
-		coord[1]++; //y++ para descer
-		if(plano.coordenadaExiste(coord)) {
-			if(plano.moverRobo(coordTemp, coord)) {
-				this.modificarPontuacao(10, true);
+	public boolean movDiagCimaEsquerda(){
+		boolean movRealizado=false;
+		if(!(movimentosRestritos && idDoMovimento==6)) {
+			idDoMovimento = 6;
+			movRealizado=true;
+			int coordTemp[] = new int[2];
+			coordTemp[0] = coord[0];
+			coordTemp[1] = coord[1];
+			coord[0]--; //x-- para esquerda
+			coord[1]--; //y-- para subir
+			if(plano.coordenadaExiste(coord)) {
+				if(plano.moverRobo(coordTemp, coord)) {
+					this.modificarPontuacao(10, true);
+				}
+				qtdCasasVisitadas++;
+				qtdCasasNoroeste++;
+			} else {
+				coord[0]++;
+				coord[1]++;
+				movRealizado=false;
 			}
-			qtdCasasVisitadas++;
-			qtdCasasSudeste++;
-		} else {
-			coord[0]--;
-			coord[1]--;
 		}
+		return movRealizado;
 	}
 	
-	public void movDiagBaixoEsquerda(){
-		int coordTemp[] = new int[2];
-		coordTemp[0] = coord[0];
-		coordTemp[1] = coord[1];
-		coord[0]--; //x-- para esquerda
-		coord[1]++; //y++ para descer
-		if(plano.coordenadaExiste(coord)) {
-			if(plano.moverRobo(coordTemp, coord)) {
-				this.modificarPontuacao(10, true);
+	public boolean movDiagBaixoDireita(){
+		boolean movRealizado=false;
+		if(!(movimentosRestritos && idDoMovimento==7)) {
+			idDoMovimento = 7;
+			movRealizado=true;
+			int coordTemp[] = new int[2];
+			coordTemp[0] = coord[0];
+			coordTemp[1] = coord[1];
+			coord[0]++; //x++ para direita
+			coord[1]++; //y++ para descer
+			if(plano.coordenadaExiste(coord)) {
+				if(plano.moverRobo(coordTemp, coord)) {
+					this.modificarPontuacao(10, true);
+				}
+				qtdCasasVisitadas++;
+				qtdCasasSudeste++;
+			} else {
+				coord[0]--;
+				coord[1]--;
+				movRealizado=false;
 			}
-			qtdCasasVisitadas++;
-			qtdCasasSudoeste++;
-		} else {
-			coord[0]++;
-			coord[1]--;
 		}
+		return movRealizado;
+	}
+	
+	public boolean movDiagBaixoEsquerda(){
+		boolean movRealizado=false;
+		if(!(movimentosRestritos && idDoMovimento==8)) {
+			idDoMovimento = 8;
+			movRealizado=true;
+			int coordTemp[] = new int[2];
+			coordTemp[0] = coord[0];
+			coordTemp[1] = coord[1];
+			coord[0]--; //x-- para esquerda
+			coord[1]++; //y++ para descer
+			if(plano.coordenadaExiste(coord)) {
+				if(plano.moverRobo(coordTemp, coord)) {
+					this.modificarPontuacao(10, true);
+				}
+				qtdCasasVisitadas++;
+				qtdCasasSudoeste++;
+			} else {
+				coord[0]++;
+				coord[1]--;
+				movRealizado=false;
+			}
+		}
+		return movRealizado;
+	}
+	
+	public void iniciarCaminhadaAutonomaB() {
+		this.roboComMovimentosRestritos(false);
+		
+		for(;this.movDiagBaixoDireita();) 
+			plano.imprimirTabuleiro();
+		
+	
+		for(;this.movParaCima();) 
+			plano.imprimirTabuleiro();
+		
+		
+		for(;this.movDiagBaixoEsquerda();)
+			plano.imprimirTabuleiro();
+		
+		for(;this.movParaCima();) 
+			plano.imprimirTabuleiro();
+		
+	}
+	
+	public void iniciarCaminhadaAutonomaA() {
+		this.roboComMovimentosRestritos(false);
+		
+		do {
+
+			for(;this.movParaDireita();) 
+				plano.imprimirTabuleiro();
+			
+			this.movParaBaixo();
+			
+			for(;this.movParaEsquerda();) 
+				plano.imprimirTabuleiro();
+			
+		} while(this.movParaBaixo());
+		
 	}
 	
 	public int getPontuacao() {

@@ -22,16 +22,19 @@ public class Tabuleiro {
 		}
 		
 		Random numAleatorio = new Random();
-		for(int i=0; i<((int)tamanho*0.6); i++ ) { // B)
+		for(int i=0; i<((int)tamanho*0.7); i++ ) { // B)
 			celulas.get(numAleatorio.nextInt(tamanho*tamanho)).setTemMoeda(true);
 		}
 		
 		xMeio = (int)tamanho/2;
 		yMeio = (int)tamanho/2;
-		for (Celulas celula : celulas) 
-			if(celula.x==xMeio && celula.y==yMeio) {
-				celula.setTemMoeda(false);
+	}
+	
+	public void inicializarRobo(int coord[]) {
+		for (Celulas celula : celulas)
+			if(celula.getX() == coord[0] && celula.getY() == coord[1]) {
 				celula.setTemRobo(true);
+				celula.setTemMoeda(false);
 				celula.setRoboVisitou(true);
 			}
 	}
@@ -73,8 +76,6 @@ public class Tabuleiro {
 	public void imprimirTabuleiro() { // E)
 		Celulas celulaTemp;
 		int contY=tamanho-1;
-		
-		//for(int i=tamanho-1; i>=0; i--) 
 		for(int i=0; i<tamanho; i++) {
 			System.out.print(i+" ");
 		}
@@ -102,5 +103,7 @@ public class Tabuleiro {
 				contY--;
 			}
 		}
+		System.out.println();
 	}
+	
 }
