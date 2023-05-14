@@ -42,7 +42,7 @@ public class Questao18 {
 		//System.out.printf("(%d, %d)\n", robo.coord[0], robo.coord[1] );
 		//t.imprimirTabuleiro();
 		
-		//System.out.println(robo.getPontuacao());
+		System.out.println(robo2.getPontuacao());
 		
 
 			
